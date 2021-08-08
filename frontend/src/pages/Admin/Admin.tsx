@@ -1,4 +1,4 @@
-import { Table, Tag, Space } from 'antd';
+import { Table } from 'antd';
 import { Header } from '../../components/Header/Header';
 
 import img1 from '../../images/d1.jpg';

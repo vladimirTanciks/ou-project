@@ -2,6 +2,7 @@ import express from "express";
 import "express-async-errors";
 import { json } from "body-parser";
 import mongoose from "mongoose";
+import cors from "cors";
 
 import { currentUserRouter } from "./routes/current-user";
 import { signinRouter } from "./routes/signin";
@@ -12,6 +13,12 @@ import { errorHandler } from "./middlewares/error-handler";
 import { NotFoundError } from "./errors/not-found-error";
 
 const app = express();
+app.use(cors());
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 app.use(json());
 
 app.use(currentUserRouter);
@@ -42,8 +49,8 @@ const start = async () => {
   }
 };
 
-app.listen(3000, () => {
-  console.log('Listening on port 3000"!!');
+app.listen(3080, () => {
+  console.log('Listening on port 3080"');
 });
 
 start();

@@ -5,7 +5,7 @@ services:
     build:
       context: ./backend/auth-service
     ports:
-      - "3000:3000"
+      - "3080:3080"
     volumes:
       - /app/node_modules
       - ./backend/auth-service:/app
@@ -14,7 +14,7 @@ services:
     build:
       context: ./frontend
     ports:
-      - "3080:3080"
+      - "3000:3000"
     volumes:
       - /home/node/app/node_modules
-      - ./frontend:/app
+      - ./frontend:/home/node/app

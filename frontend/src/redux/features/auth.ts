@@ -3,11 +3,13 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 export const authSlice = createSlice({
   name: 'auth',
   initialState: {
-    isAuthenticated: false
+    isAuthenticated: false,
   },
   reducers: {
-    authenticate: (state, { payload }: PayloadAction<{isAuthenticated: boolean  }>) => {
-      state.isAuthenticated = payload.isAuthenticated
-    }
-  }
-})
+    authenticate: (state, { payload }: PayloadAction<boolean>) => {
+      state.isAuthenticated = payload;
+    },
+  },
+});
+
+export const { authenticate } = authSlice.actions;
