@@ -1,53 +1,48 @@
-import { FC, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { FC } from 'react';
+import { useSelector } from 'react-redux';
 import { Form, Input } from 'antd';
+import { Link, useHistory } from 'react-router-dom';
 
-import { authenticate } from '../../redux/features/auth';
+import { AuthState, loginUser } from '../../redux/features/auth';
 
-import { FormButton, SignInCard } from './styled';
+import { RootState, useAppDispatch } from '../../redux/store';
+
+import {
+  StyledErrorMessage,
+  StyledFormButton,
+  StyledSignInCard,
+  StyledRegister,
+} from './styled';
+import { routes } from '../../router/routes';
+
+import { UserCredentials } from '../../types';
 
 const Login: FC = (): JSX.Element => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+  const history = useHistory();
 
-  const onFinish = (values: any) => {
-    console.log('Success:', values);
+  const { isLoading, error }: AuthState = useSelector(
+    ({ auth }: RootState) => auth,
+  );
+
+  const handleSubmit = async (credentials: UserCredentials): Promise<void> => {
+    const { payload } = await dispatch(loginUser(credentials));
+
+    if (payload?.token) {
+      history.push(routes.MAP);
+    }
+  };
+
+  const onFinish = (credentials: UserCredentials) => {
+    handleSubmit(credentials);
   };
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
   };
 
-  const handleSubmit = async () => {
-    try {
-      const data = JSON.stringify({
-        email: 'vladimirs.tanciks@loadero.com',
-        password: '123',
-      });
-
-      const response = await fetch('http://localhost:3080/api/users/signin', {
-        method: 'POST',
-        body: data,
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      });
-
-      const token = await response.json();
-
-      dispatch(authenticate(true));
-
-      console.log(token);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  useEffect(() => {
-    handleSubmit();
-  }, []);
   return (
-    <SignInCard title="Log in">
+    <StyledSignInCard title="Log in">
       <Form
         layout="vertical"
         name="basic"
@@ -58,12 +53,13 @@ const Login: FC = (): JSX.Element => {
         onFinishFailed={onFinishFailed}
       >
         <Form.Item
-          label="Username"
-          name="username"
+          label="Email"
+          name="email"
           rules={[
             {
               required: true,
-              message: 'Please input your username!',
+              type: 'email',
+              message: 'Please input valid email!',
             },
           ]}
         >
@@ -84,12 +80,24 @@ const Login: FC = (): JSX.Element => {
         </Form.Item>
 
         <Form.Item>
-          <FormButton type="primary" htmlType="submit">
+          <StyledFormButton
+            type="primary"
+            htmlType="submit"
+            loading={isLoading}
+          >
             Submit
-          </FormButton>
+          </StyledFormButton>
         </Form.Item>
+
+        {error && <StyledErrorMessage>{error}</StyledErrorMessage>}
+
+        <Link to={routes.REGISTER}>
+          <StyledRegister type="text" block>
+            Register
+          </StyledRegister>
+        </Link>
       </Form>
-    </SignInCard>
+    </StyledSignInCard>
   );
 };
 

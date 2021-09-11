@@ -9,3 +9,11 @@ export const StyledHeader = styled(Layout.Header)`
   height: auto;
   background: #ffffff;
 `;
+
+export const StyledNav = styled.div`
+  float: right;
+`;
+export const StyledLogout = styled.span`
+  margin-right: 20px;
+  cursor: pointer;
+`;

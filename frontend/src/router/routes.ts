@@ -4,4 +4,5 @@ export const routes = {
   HOME: '/',
   MAP: '/map',
   NEW_REPORT: '/new-report',
+  REGISTER: '/register',
 };

@@ -46,7 +46,7 @@ router.post(
       "store_me_in_env_var" // To do: Store secret in env vars
     );
 
-    res.status(200).send(userJWT);
+    res.status(200).send({ user: email, token: userJWT });
   }
 );
 

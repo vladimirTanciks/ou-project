@@ -1,12 +1,23 @@
 import styled from 'styled-components/macro';
 import { Card, Button } from 'antd';
 
-export const SignInCard = styled(Card)`
+export const StyledSignInCard = styled(Card)`
   max-width: 500px;
   margin: 0 auto;
   margin-top: 200px;
 `;
 
-export const FormButton = styled(Button)`
+export const StyledFormButton = styled(Button)`
+  margin-top: 14px;
   width: 100%;
+`;
+
+export const StyledErrorMessage = styled.div`
+  width: 100%;
+  color: red;
+  text-align: center;
+`;
+
+export const StyledRegister = styled(Button)`
+  text-align: center;
 `;
