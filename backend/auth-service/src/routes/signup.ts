@@ -34,7 +34,7 @@ router.post(
     const userJWT = jwt.sign(
       {
         id: user.id,
-        email: user.email,
+        user: user.email,
       },
       "store_me_in_env_var" // To do: Store secret in env vars
     );

@@ -1,7 +1,11 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
+import { useSelector } from 'react-redux';
+import { Form, Input } from 'antd';
+import { Link, useHistory } from 'react-router-dom';
 
-import { Button, Form, Input } from 'antd';
-import { Link } from 'react-router-dom';
+import { AuthState, registerUser } from '../../redux/features/auth';
+
+import { RootState, useAppDispatch } from '../../redux/store';
 
 import {
   StyledErrorMessage,
@@ -14,40 +18,18 @@ import { routes } from '../../router/routes';
 import { UserCredentials } from '../../types';
 
 const Register: FC = (): JSX.Element => {
-  const [errorMessage, setErrorMessage] = useState<string>('');
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
+  const history = useHistory();
+
+  const { isLoading, error }: AuthState = useSelector(
+    ({ auth }: RootState) => auth,
+  );
 
   const handleSubmit = async (credentials: UserCredentials): Promise<void> => {
-    setErrorMessage('');
+    const { payload } = await dispatch(registerUser(credentials));
 
-    try {
-      setIsLoading(true);
-
-      const data = JSON.stringify(credentials);
-
-      // TODO: Create reusable api utility function / move ro redux
-      const response = await fetch('http://localhost:3080/api/users/signup', {
-        method: 'POST',
-        body: data,
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      });
-
-      const respData = await response.json();
-
-      if (Array.isArray(respData.errors)) {
-        console.log(respData.errors);
-
-        setErrorMessage(respData.errors[0].message);
-
-        return;
-      }
-    } catch (error) {
-      // TODO: Create reusable error handler utility function
-    } finally {
-      setIsLoading(false);
+    if (payload?.email) {
+      history.push(routes.MAP);
     }
   };
 
@@ -107,9 +89,7 @@ const Register: FC = (): JSX.Element => {
           </StyledFormButton>
         </Form.Item>
 
-        {errorMessage && (
-          <StyledErrorMessage>{errorMessage}</StyledErrorMessage>
-        )}
+        {error && <StyledErrorMessage>{error}</StyledErrorMessage>}
 
         <Link to={routes.HOME}>
           <StyledLogin type="text" block>

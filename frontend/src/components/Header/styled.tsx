@@ -17,3 +17,7 @@ export const StyledLogout = styled.span`
   margin-right: 20px;
   cursor: pointer;
 `;
+
+export const StyledAccount = styled.span`
+  margin-left: 15px;
+`;

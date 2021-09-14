@@ -18,6 +18,6 @@ export type RequestStatus = 'idle' | 'loading' | 'succeeded' | 'failed';
  * after login or registration
  */
 export type UserAuth = {
-  account: string;
+  user: string;
   token: string;
 };
