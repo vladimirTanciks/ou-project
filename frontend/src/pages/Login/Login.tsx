@@ -7,15 +7,16 @@ import { AuthState, loginUser } from '../../redux/features/auth';
 
 import { RootState, useAppDispatch } from '../../redux/store';
 
+import { routes } from '../../router/routes';
+
+import { UserCredentials } from '../../types';
+
 import {
   StyledErrorMessage,
   StyledFormButton,
   StyledSignInCard,
   StyledRegister,
 } from './styled';
-import { routes } from '../../router/routes';
-
-import { UserCredentials } from '../../types';
 
 const Login: FC = (): JSX.Element => {
   const dispatch = useAppDispatch();

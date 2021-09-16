@@ -1,14 +1,16 @@
 import { FunctionComponent } from 'react';
-import { DumpImage } from './styled'
+import { DumpImage } from './styled';
 
 interface MarkerProps {
   lat: number;
   lng: number;
-  onClick: any;
+  onClick?: any;
   active?: boolean;
-  img: string
+  img: string;
 }
 
-export const Marker: FunctionComponent<MarkerProps> = ({ onClick, active, img }) => (
-  <DumpImage src={img} alt="swdwdw" onClick={onClick} />
-);
+export const Marker: FunctionComponent<MarkerProps> = ({
+  onClick,
+  active,
+  img,
+}) => <DumpImage src={img} alt="swdwdw" onClick={onClick} />;

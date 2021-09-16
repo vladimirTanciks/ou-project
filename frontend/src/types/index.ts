@@ -21,3 +21,12 @@ export type UserAuth = {
   user: string;
   token: string;
 };
+
+/***
+ * System notificator used to
+ * provide feed feedback to user
+ */
+export type NotificatorInfo = {
+  message: string;
+  type: 'success' | 'info' | 'warning' | 'error';
+};

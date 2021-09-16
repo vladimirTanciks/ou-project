@@ -1,26 +1,30 @@
 import { FC } from 'react';
-import GoogleMapReact from 'google-map-react';
-import { useDispatch } from 'react-redux';
-import { setActiveReport } from '../../redux/features/map';
+import GoogleMapReact, { Coords } from 'google-map-react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setActiveReport, setMapCoords } from '../../redux/features/map';
 
 import { IReport } from '../../entities/report';
 
 import { Marker } from './Marker';
-import { Wrapper } from './styled';
+
+import { StyledCenterMarker, Wrapper } from './styled';
 
 import img1 from '../../images/d1.jpg';
 import img2 from '../../images/d2.jpg';
+import { RootState } from '../../redux/store';
+
+const MAP_SETTINGS = {
+  center: {
+    lat: 55.871047,
+    lng: 26.520195,
+  },
+  zoom: 15,
+};
 
 export const Map: FC = (): JSX.Element => {
   const dispatch = useDispatch();
 
-  const MAP_SETTINGS = {
-    center: {
-      lat: 55.871047,
-      lng: 26.520195,
-    },
-    zoom: 15,
-  };
+  const centerCoords = useSelector((state: RootState) => state.map.coords);
 
   const createMapOptions = () => ({
     panControl: false,
@@ -60,6 +64,10 @@ export const Map: FC = (): JSX.Element => {
     dispatch(setActiveReport(report));
   };
 
+  const setSelectedCoords = (coords: Coords): void => {
+    dispatch(setMapCoords(coords));
+  };
+
   return (
     <Wrapper>
       <GoogleMapReact
@@ -67,6 +75,8 @@ export const Map: FC = (): JSX.Element => {
         defaultCenter={MAP_SETTINGS.center}
         defaultZoom={MAP_SETTINGS.zoom}
         options={createMapOptions}
+        onChange={(val) => setSelectedCoords(val.center)}
+        center={centerCoords.lng ? centerCoords : MAP_SETTINGS.center}
       >
         {reports.map((report: IReport) => (
           <Marker
@@ -79,6 +89,8 @@ export const Map: FC = (): JSX.Element => {
           />
         ))}
       </GoogleMapReact>
+
+      <StyledCenterMarker />
     </Wrapper>
   );
 };

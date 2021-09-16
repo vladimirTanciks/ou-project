@@ -19,5 +19,9 @@ export const StyledLogout = styled.span`
 `;
 
 export const StyledAccount = styled.span`
-  margin-left: 15px;
+  margin-left: 10px;
+`;
+
+export const StyledSeparator = styled.span`
+  margin: 0 10px;
 `;

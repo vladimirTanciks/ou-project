@@ -7,7 +7,7 @@ import Register from '../pages/Register/Register';
 
 import { Report } from '../pages/Report/Report';
 
-import { LayoutWithSidebar } from '../HOC/Layout/Layout';
+import { Layout } from '../HOC/Layout/Layout';
 
 import { ReportDetails } from '../pages/ReportMap/ReportDetails';
 
@@ -19,17 +19,16 @@ const AppRouter = (): JSX.Element => (
     <Route exact path={routes.HOME} component={Login} />
 
     <PrivateRoute path={routes.MAP}>
-      <LayoutWithSidebar
-        layoutChildren={<Map />}
-        sidebarChildren={<ReportDetails />}
-      />
+      <Layout layoutChildren={<Map />} sidebarChildren={<ReportDetails />} />
     </PrivateRoute>
 
     <Route exact path={routes.ADMIN} component={Admin} />
 
     <Route exact path={routes.REGISTER} component={Register} />
 
-    <Route exact path={routes.NEW_REPORT} component={Report} />
+    <PrivateRoute path={routes.NEW_REPORT}>
+      <Layout layoutChildren={<Report />} />
+    </PrivateRoute>
   </Switch>
 );
 

@@ -1,14 +1,23 @@
-import { Avatar } from 'antd';
+import { Button } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { UserOutlined } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
+import { PlusOutlined } from '@ant-design/icons';
 
 import { logout } from '../../redux/features/auth';
 
 import { RootState } from '../../redux/store';
 
+import { routes } from '../../router/routes';
+
 import { Logo } from '../Logo/Logo';
 
-import { StyledHeader, StyledLogout, StyledNav, StyledAccount } from './styled';
+import {
+  StyledHeader,
+  StyledLogout,
+  StyledNav,
+  StyledAccount,
+  StyledSeparator,
+} from './styled';
 
 export const Header = (): JSX.Element => {
   const dispatch = useDispatch();
@@ -25,9 +34,13 @@ export const Header = (): JSX.Element => {
     <StyledHeader>
       <Logo />
       <StyledNav>
-        <StyledLogout onClick={handleLogout}>logout</StyledLogout>
-        <Avatar size="large" icon={<UserOutlined />} />
+        <Link to={routes.NEW_REPORT}>
+          <Button type="primary" shape="circle" icon={<PlusOutlined />} />
+        </Link>
+
         <StyledAccount>{accountName}</StyledAccount>
+        <StyledSeparator>|</StyledSeparator>
+        <StyledLogout onClick={handleLogout}>logout</StyledLogout>
       </StyledNav>
     </StyledHeader>
   );

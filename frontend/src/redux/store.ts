@@ -2,11 +2,13 @@ import { configureStore } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
 import { authSlice } from '../redux/features/auth';
 import { mapSlice } from '../redux/features/map';
+import { uiSlice } from '../redux/features/ui';
 
 export const store = configureStore({
   reducer: {
     auth: authSlice.reducer,
     map: mapSlice.reducer,
+    ui: uiSlice.reducer,
   },
 });
 
