@@ -11,11 +11,14 @@ import { routes } from '../../router/routes';
 
 import { UserCredentials } from '../../types';
 
+import logo from '../../images/logo.svg';
+
 import {
   StyledErrorMessage,
   StyledFormButton,
   StyledSignInCard,
   StyledRegister,
+  Wrapper,
 } from './styled';
 
 const Login: FC = (): JSX.Element => {
@@ -43,62 +46,65 @@ const Login: FC = (): JSX.Element => {
   };
 
   return (
-    <StyledSignInCard title="Log in">
-      <Form
-        layout="vertical"
-        name="basic"
-        initialValues={{
-          remember: true,
-        }}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-      >
-        <Form.Item
-          label="Email"
-          name="email"
-          rules={[
-            {
-              required: true,
-              type: 'email',
-              message: 'Please input valid email!',
-            },
-          ]}
+    <Wrapper>
+      <img alt="logo" src={logo} style={{ width: 200, marginTop: 100 }} />
+      <StyledSignInCard title="Log in">
+        <Form
+          layout="vertical"
+          name="basic"
+          initialValues={{
+            remember: true,
+          }}
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
         >
-          <Input />
-        </Form.Item>
-
-        <Form.Item
-          label="Password"
-          name="password"
-          rules={[
-            {
-              required: true,
-              message: 'Please input your password!',
-            },
-          ]}
-        >
-          <Input.Password />
-        </Form.Item>
-
-        <Form.Item>
-          <StyledFormButton
-            type="primary"
-            htmlType="submit"
-            loading={isLoading}
+          <Form.Item
+            label="Email"
+            name="email"
+            rules={[
+              {
+                required: true,
+                type: 'email',
+                message: 'Please input valid email!',
+              },
+            ]}
           >
-            Submit
-          </StyledFormButton>
-        </Form.Item>
+            <Input />
+          </Form.Item>
 
-        {error && <StyledErrorMessage>{error}</StyledErrorMessage>}
+          <Form.Item
+            label="Password"
+            name="password"
+            rules={[
+              {
+                required: true,
+                message: 'Please input your password!',
+              },
+            ]}
+          >
+            <Input.Password />
+          </Form.Item>
 
-        <Link to={routes.REGISTER}>
-          <StyledRegister type="text" block>
-            or Register
-          </StyledRegister>
-        </Link>
-      </Form>
-    </StyledSignInCard>
+          <Form.Item>
+            <StyledFormButton
+              type="primary"
+              htmlType="submit"
+              loading={isLoading}
+            >
+              Submit
+            </StyledFormButton>
+          </Form.Item>
+
+          {error && <StyledErrorMessage>{error}</StyledErrorMessage>}
+
+          <Link to={routes.REGISTER}>
+            <StyledRegister type="text" block>
+              or Register
+            </StyledRegister>
+          </Link>
+        </Form>
+      </StyledSignInCard>
+    </Wrapper>
   );
 };
 

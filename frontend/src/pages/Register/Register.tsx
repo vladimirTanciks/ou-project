@@ -7,11 +7,14 @@ import { AuthState, registerUser } from '../../redux/features/auth';
 
 import { RootState, useAppDispatch } from '../../redux/store';
 
+import logo from '../../images/logo.svg';
+
 import {
   StyledErrorMessage,
   StyledFormButton,
   StyledLogin,
   StyledSignInCard,
+  Wrapper,
 } from './styled';
 import { routes } from '../../router/routes';
 
@@ -42,62 +45,65 @@ const Register: FC = (): JSX.Element => {
   };
 
   return (
-    <StyledSignInCard title="Register">
-      <Form
-        layout="vertical"
-        name="basic"
-        initialValues={{
-          remember: true,
-        }}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-      >
-        <Form.Item
-          label="Email"
-          name="email"
-          rules={[
-            {
-              required: true,
-              type: 'email',
-              message: 'Please input valid email!',
-            },
-          ]}
+    <Wrapper>
+      <img alt="logo" src={logo} style={{ width: 200, marginTop: 100 }} />
+      <StyledSignInCard title="Register">
+        <Form
+          layout="vertical"
+          name="basic"
+          initialValues={{
+            remember: true,
+          }}
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
         >
-          <Input />
-        </Form.Item>
-
-        <Form.Item
-          label="Password"
-          name="password"
-          rules={[
-            {
-              required: true,
-              message: 'Please input your password!',
-            },
-          ]}
-        >
-          <Input.Password />
-        </Form.Item>
-
-        <Form.Item>
-          <StyledFormButton
-            type="primary"
-            htmlType="submit"
-            loading={isLoading}
+          <Form.Item
+            label="Email"
+            name="email"
+            rules={[
+              {
+                required: true,
+                type: 'email',
+                message: 'Please input valid email!',
+              },
+            ]}
           >
-            Submit
-          </StyledFormButton>
-        </Form.Item>
+            <Input />
+          </Form.Item>
 
-        {error && <StyledErrorMessage>{error}</StyledErrorMessage>}
+          <Form.Item
+            label="Password"
+            name="password"
+            rules={[
+              {
+                required: true,
+                message: 'Please input your password!',
+              },
+            ]}
+          >
+            <Input.Password />
+          </Form.Item>
 
-        <Link to={routes.HOME}>
-          <StyledLogin type="text" block>
-            or Login
-          </StyledLogin>
-        </Link>
-      </Form>
-    </StyledSignInCard>
+          <Form.Item>
+            <StyledFormButton
+              type="primary"
+              htmlType="submit"
+              loading={isLoading}
+            >
+              Submit
+            </StyledFormButton>
+          </Form.Item>
+
+          {error && <StyledErrorMessage>{error}</StyledErrorMessage>}
+
+          <Link to={routes.HOME}>
+            <StyledLogin type="text" block>
+              or Login
+            </StyledLogin>
+          </Link>
+        </Form>
+      </StyledSignInCard>
+    </Wrapper>
   );
 };
 

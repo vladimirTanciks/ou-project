@@ -2,9 +2,9 @@ import styled from 'styled-components/macro';
 import { Card, Button } from 'antd';
 
 export const StyledSignInCard = styled(Card)`
-  max-width: 500px;
+  width: 500px;
   margin: 0 auto;
-  margin-top: 200px;
+  margin-top: 30px;
 `;
 
 export const StyledFormButton = styled(Button)`
@@ -20,4 +20,12 @@ export const StyledErrorMessage = styled.div`
 
 export const StyledLogin = styled(Button)`
   text-align: center;
+`;
+
+export const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  width: 100%;
 `;
