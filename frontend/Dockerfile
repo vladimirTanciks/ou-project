@@ -1,4 +1,4 @@
-FROM node:alpine as builder
+FROM node:alpine
  
 USER node
  
@@ -8,8 +8,5 @@ WORKDIR /home/node/app
 COPY --chown=node:node ./package.json ./
 RUN npm install
 COPY --chown=node:node ./ ./
-RUN npm run build
-
-FROM nginx
-COPY --from=builder /home/node/app/build /user/share/nginx/html
  
+CMD ["npm", "start"]
