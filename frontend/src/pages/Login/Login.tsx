@@ -94,7 +94,7 @@ const Login: FC = (): JSX.Element => {
 
         <Link to={routes.REGISTER}>
           <StyledRegister type="text" block>
-            Register
+            or Register
           </StyledRegister>
         </Link>
       </Form>

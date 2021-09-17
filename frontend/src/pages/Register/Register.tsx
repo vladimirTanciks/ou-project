@@ -93,7 +93,7 @@ const Register: FC = (): JSX.Element => {
 
         <Link to={routes.HOME}>
           <StyledLogin type="text" block>
-            Login
+            or Login
           </StyledLogin>
         </Link>
       </Form>

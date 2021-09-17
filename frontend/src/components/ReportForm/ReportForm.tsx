@@ -51,7 +51,7 @@ export const ReportForm = () => {
       style={{ display: 'flex', flexDirection: 'column' }}
     >
       <StyleRadioWrapper>
-        <Radio.Group>
+        <Radio.Group style={{ marginRight: 100 }}>
           <div style={{ marginBottom: 10, fontSize: 20 }}>Type</div>
 
           <Space direction="vertical">
@@ -83,7 +83,8 @@ export const ReportForm = () => {
           <Input
             placeholder="Location"
             value={`${lat}, ${lng}`}
-            style={{ background: '#f0f2f5' }}
+            style={{ background: '#f0f2f5', color: 'black' }}
+            disabled
           />
         </Form.Item>
         <Form.Item
