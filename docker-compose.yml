@@ -9,6 +9,15 @@ services:
     volumes:
       - /app/node_modules
       - ./backend/auth-service:/app
+  report:
+    restart: always
+    build:
+      context: ./backend/report-service
+    ports:
+      - "3090:3090"
+    volumes:
+      - /app/node_modules
+      - ./backend/report-service:/app
   frontend:
     stdin_open: true
     build:

@@ -85,7 +85,7 @@ export interface AuthState {
 export const authSlice = createSlice({
   name: 'auth',
   initialState: {
-    isAuthenticated: true,
+    isAuthenticated: false,
     isLoading: false,
     status: 'idle',
     accountData: null,

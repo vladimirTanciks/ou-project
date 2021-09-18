@@ -1,27 +1,37 @@
 import { useState } from 'react';
 import { Form, Input, Radio, Space, Button, message, Upload } from 'antd';
+import { useHistory } from 'react-router';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { useDispatch, useSelector } from 'react-redux';
+
+import { AppDispatch } from '../../redux/store';
+
+import { isSupportedMedia } from '../../utils';
 
 import { storage } from '../../firebase';
 
 import { setMapCoords } from '../../redux/features/map';
+import { createReport } from '../../redux/features/reports';
 import { showNotification } from '../../redux/features/ui';
 import { RootState } from '../../redux/store';
-import { NotificatorInfo } from '../../types';
+import { NotificatorInfo, Report } from '../../types';
+
+import { routes } from '../../router/routes';
 
 import { StyleRadioWrapper } from './styled';
 
 import { Uploader } from '../Uploader/Uploader';
 
 export const ReportForm = () => {
+  const history = useHistory();
+
   const [radioState, setRadioState] = useState({ type: 'glass', size: 'type' });
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { lat, lng } = useSelector((state: RootState) => state.map.coords);
   const [uploadedFile, setUploadedFile] = useState<File>();
   const selectedCoords = `${lat}, ${lng}`;
 
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   const uploadImageToStore = (values: any) => {
     if (!uploadedFile) return;
@@ -35,7 +45,7 @@ export const ReportForm = () => {
         // Get a download URL for the file.
         getDownloadURL(snapshot.ref).then((url) => {
           setIsLoading(false);
-          const formData = {
+          const formData: Report = {
             location: selectedCoords,
             image: url,
             type: radioState.type,
@@ -43,7 +53,9 @@ export const ReportForm = () => {
             ...values,
           };
 
-          console.log(formData);
+          dispatch(createReport(formData)).then(() => {
+            history.push(routes.MAP);
+          });
         });
       })
       .catch(() => {
@@ -88,10 +100,11 @@ export const ReportForm = () => {
 
   const uploaderProps = {
     beforeUpload: (file: File) => {
-      if (file.type !== 'image/png') {
-        message.error(`${file.name} is not a png file`);
+      if (!isSupportedMedia(file.type)) {
+        message.error(`${file.name} is not supported file`);
       }
-      return file.type === 'image/png' ? true : Upload.LIST_IGNORE;
+
+      return isSupportedMedia(file.type) ? true : Upload.LIST_IGNORE;
     },
 
     onChange: (info: any) => {

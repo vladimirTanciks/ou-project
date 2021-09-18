@@ -30,3 +30,15 @@ export type NotificatorInfo = {
   message: string;
   type: 'success' | 'info' | 'warning' | 'error';
 };
+
+/***
+ * Report entity used to represent
+ * a reported dump
+ */
+export type Report = {
+  location: string;
+  image: string;
+  size: string;
+  type: string;
+  details: string;
+};
