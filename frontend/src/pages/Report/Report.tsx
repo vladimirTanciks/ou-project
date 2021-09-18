@@ -18,7 +18,7 @@ export const Report = (): JSX.Element => {
           <ReportForm />
         </StyledFormWrapper>
         <StyledMapWrapper>
-          <Map />
+          <Map selectCoordsOnDrag />
         </StyledMapWrapper>
       </StyledFlexContainer>
     </StyledWrapper>

@@ -21,7 +21,11 @@ const MAP_SETTINGS = {
   zoom: 15,
 };
 
-export const Map: FC = (): JSX.Element => {
+interface IProps {
+  selectCoordsOnDrag?: boolean;
+}
+
+export const Map: FC<IProps> = ({ selectCoordsOnDrag }): JSX.Element => {
   const dispatch = useDispatch();
 
   const centerCoords = useSelector((state: RootState) => state.map.coords);
@@ -65,6 +69,8 @@ export const Map: FC = (): JSX.Element => {
   };
 
   const setSelectedCoords = (coords: Coords): void => {
+    if (!selectCoordsOnDrag) return;
+
     dispatch(setMapCoords(coords));
   };
 
@@ -90,7 +96,7 @@ export const Map: FC = (): JSX.Element => {
         ))}
       </GoogleMapReact>
 
-      <StyledCenterMarker />
+      {selectCoordsOnDrag && <StyledCenterMarker />}
     </Wrapper>
   );
 };

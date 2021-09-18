@@ -1,5 +1,10 @@
-import { Form, Input, Radio, Space, Button } from 'antd';
+import { useState } from 'react';
+import { Form, Input, Radio, Space, Button, message, Upload } from 'antd';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { useDispatch, useSelector } from 'react-redux';
+
+import { storage } from '../../firebase';
+
 import { setMapCoords } from '../../redux/features/map';
 import { showNotification } from '../../redux/features/ui';
 import { RootState } from '../../redux/store';
@@ -7,13 +12,55 @@ import { NotificatorInfo } from '../../types';
 
 import { StyleRadioWrapper } from './styled';
 
+import { Uploader } from '../Uploader/Uploader';
+
 export const ReportForm = () => {
+  const [radioState, setRadioState] = useState({ type: 'glass', size: 'type' });
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { lat, lng } = useSelector((state: RootState) => state.map.coords);
+  const [uploadedFile, setUploadedFile] = useState<File>();
+  const selectedCoords = `${lat}, ${lng}`;
 
   const dispatch = useDispatch();
 
+  const uploadImageToStore = (values: any) => {
+    if (!uploadedFile) return;
+
+    setIsLoading(true);
+
+    const imageRef = ref(storage, 'images/' + uploadedFile?.name);
+
+    return uploadBytesResumable(imageRef, uploadedFile)
+      .then((snapshot) => {
+        // Get a download URL for the file.
+        getDownloadURL(snapshot.ref).then((url) => {
+          setIsLoading(false);
+          const formData = {
+            location: selectedCoords,
+            image: url,
+            type: radioState.type,
+            size: radioState.size,
+            ...values,
+          };
+
+          console.log(formData);
+        });
+      })
+      .catch(() => {
+        setIsLoading(false);
+        dispatch(
+          showNotification({ message: 'Image upload failed', type: 'error' }),
+        );
+      });
+  };
+
   const onFinish = (values: any) => {
-    console.log('Success:', values);
+    if (!uploadedFile) {
+      dispatch(showNotification({ message: 'Image required', type: 'error' }));
+      return;
+    }
+
+    uploadImageToStore(values);
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -39,6 +86,24 @@ export const ReportForm = () => {
     navigator.geolocation.getCurrentPosition(onSuccess, onFailure);
   };
 
+  const uploaderProps = {
+    beforeUpload: (file: File) => {
+      if (file.type !== 'image/png') {
+        message.error(`${file.name} is not a png file`);
+      }
+      return file.type === 'image/png' ? true : Upload.LIST_IGNORE;
+    },
+
+    onChange: (info: any) => {
+      setUploadedFile(info.fileList[0]);
+    },
+  };
+
+  const handleRadioChange = (e: any) => {
+    console.log(e.target);
+    setRadioState((state) => ({ ...state, [e.target.name]: e.target.value }));
+  };
+
   return (
     <Form
       layout="vertical"
@@ -51,29 +116,46 @@ export const ReportForm = () => {
       style={{ display: 'flex', flexDirection: 'column' }}
     >
       <StyleRadioWrapper>
-        <Radio.Group style={{ marginRight: 100 }}>
-          <div style={{ marginBottom: 10, fontSize: 20 }}>Type</div>
+        <Form.Item>
+          <Radio.Group
+            name="type"
+            style={{ marginRight: 100 }}
+            defaultValue="glass"
+            onChange={handleRadioChange}
+          >
+            <div style={{ marginBottom: 10, fontSize: 20 }}>Type</div>
 
-          <Space direction="vertical">
-            <Radio value={1}>Glass</Radio>
-            <Radio value={2}>Metal</Radio>
-            <Radio value={3}>Construction</Radio>
-            <Radio value={4}>Automotive</Radio>
-          </Space>
-        </Radio.Group>
+            <Space direction="vertical">
+              <Radio defaultChecked value="glass">
+                Glass
+              </Radio>
+              <Radio value="metal">Metal</Radio>
+              <Radio value="construction">Construction</Radio>
+              <Radio value="automotive">Automotive</Radio>
+            </Space>
+          </Radio.Group>
+        </Form.Item>
 
-        <Radio.Group>
-          <div style={{ marginBottom: 10, fontSize: 20 }}>Size</div>
-          <Space direction="vertical">
-            <Radio value={1}>Fits in a bag</Radio>
-            <Radio value={2}>Needs a car</Radio>
-            <Radio value={3}>Needs a van</Radio>
-          </Space>
-        </Radio.Group>
+        <Form.Item>
+          <Radio.Group
+            onChange={handleRadioChange}
+            defaultValue="bag"
+            name="size"
+          >
+            <div style={{ marginBottom: 10, fontSize: 20 }}>Size</div>
+            <Space direction="vertical">
+              <Radio defaultChecked value="bag">
+                Fits in a bag
+              </Radio>
+              <Radio value="car">Needs a car</Radio>
+              <Radio value="van">Needs a van</Radio>
+            </Space>
+          </Radio.Group>
+        </Form.Item>
       </StyleRadioWrapper>
 
       <div style={{ marginBottom: 10, marginTop: 30, fontSize: 20 }}>
-        Location
+        Location (Select using the map or device)
       </div>
 
       <Form.Item style={{ marginBottom: 0 }}>
@@ -81,15 +163,14 @@ export const ReportForm = () => {
           style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
         >
           <Input
+            name="location"
             placeholder="Location"
-            value={`${lat}, ${lng}`}
+            value={selectedCoords}
             style={{ background: '#f0f2f5', color: 'black' }}
             disabled
           />
         </Form.Item>
         <Form.Item
-          name="month"
-          rules={[{ required: true }]}
           style={{
             display: 'inline-block',
             width: 'calc(50% - 8px)',
@@ -113,14 +194,28 @@ export const ReportForm = () => {
         Details
       </div>
 
-      <Input.TextArea rows={4} />
+      <Form.Item name="details">
+        <Input.TextArea rows={4} />
+      </Form.Item>
 
-      <div style={{ marginBottom: 10, marginTop: 30, fontSize: 20 }}>
-        Upload image
-        <Button type="default">Upload</Button>
+      <div
+        style={{
+          marginBottom: 10,
+          marginTop: 30,
+
+          fontSize: 20,
+        }}
+      >
+        <span style={{ marginRight: 30 }}>Upload image</span>
+        <Uploader props={uploaderProps} />
       </div>
 
-      <Button type="primary" style={{ marginTop: 50 }}>
+      <Button
+        htmlType="submit"
+        type="primary"
+        style={{ marginTop: 50 }}
+        loading={isLoading}
+      >
         Submit report
       </Button>
     </Form>

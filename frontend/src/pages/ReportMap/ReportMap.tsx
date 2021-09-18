@@ -1,7 +1,7 @@
 import { Map } from '../../components/Map/Map';
 
 const ReportMap = (): JSX.Element => {
-  return <Map />
-}
+  return <Map />;
+};
 
-export default ReportMap
+export default ReportMap;
