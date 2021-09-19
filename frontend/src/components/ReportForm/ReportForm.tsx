@@ -25,7 +25,7 @@ import { Uploader } from '../Uploader/Uploader';
 export const ReportForm = () => {
   const history = useHistory();
 
-  const [radioState, setRadioState] = useState({ type: 'glass', size: 'type' });
+  const [radioState, setRadioState] = useState({ type: 'glass', size: 'bag' });
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { lat, lng } = useSelector((state: RootState) => state.map.coords);
   const [uploadedFile, setUploadedFile] = useState<File>();

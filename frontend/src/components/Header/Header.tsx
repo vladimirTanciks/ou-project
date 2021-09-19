@@ -32,7 +32,10 @@ export const Header = (): JSX.Element => {
 
   return (
     <StyledHeader>
-      <Logo />
+      <Link to={routes.MAP}>
+        <Logo />
+      </Link>
+
       <StyledNav>
         <Link to={routes.NEW_REPORT} style={{ marginRight: 2 }}>
           <Button
