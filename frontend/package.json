@@ -33,6 +33,10 @@
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ],
     "rules": {
       "import/no-anonymous-default-export": 0
     }
@@ -54,6 +58,7 @@
     "@types/react-router-dom": "^5.1.7",
     "babel-plugin-styled-components": "^1.12.0",
     "eslint": "7.23.0",
-    "prettier": "2.2.1"
+    "prettier": "2.2.1",
+    "eslint-config-react-app": "^6.0.0"
   }
 }
