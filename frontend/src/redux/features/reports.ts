@@ -16,7 +16,7 @@ export const createReport = createAsyncThunk(
 
       // TODO: Create reusable api utility function / move ro redux
       const response = await fetch(
-        'http://51.38.65.161/:3090/api/reports/add',
+        'http://51.38.65.161:3090/api/reports/add',
         {
           method: 'POST',
           body: data,
