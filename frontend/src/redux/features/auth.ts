@@ -28,14 +28,17 @@ export const registerUser = createAsyncThunk(
       const data = JSON.stringify(credentials);
 
       // TODO: Create reusable api utility function / move ro redux
-      const response = await fetch('http://localhost:3080/api/users/signup', {
-        method: 'POST',
-        body: data,
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        'http://51.38.65.161:3080/api/users/signup',
+        {
+          method: 'POST',
+          body: data,
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
         },
-      });
+      );
 
       const respData = await response.json();
 
@@ -60,14 +63,17 @@ export const loginUser = createAsyncThunk(
     try {
       const data = JSON.stringify(credentials);
 
-      const response = await fetch('http://localhost:3080/api/users/signin', {
-        method: 'POST',
-        body: data,
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        'http://51.38.65.161:3080/api/users/signin',
+        {
+          method: 'POST',
+          body: data,
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
         },
-      });
+      );
 
       const accountData = await response.json();
 

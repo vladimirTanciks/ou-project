@@ -15,14 +15,17 @@ export const createReport = createAsyncThunk(
       const data = JSON.stringify({ user: auth.accountData?.user, ...report });
 
       // TODO: Create reusable api utility function / move ro redux
-      const response = await fetch('http://localhost:3090/api/reports/add', {
-        method: 'POST',
-        body: data,
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        'http://51.38.65.161/:3090/api/reports/add',
+        {
+          method: 'POST',
+          body: data,
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
         },
-      });
+      );
 
       const respData = await response.json();
 
@@ -43,7 +46,7 @@ export const deleteReport = createAsyncThunk(
     try {
       // TODO: Create reusable api utility function / move ro redux
       const response = await fetch(
-        `http://localhost:3090/api/reports/delete/${reportID}`,
+        `http://51.38.65.161:3090/api/reports/delete/${reportID}`,
         {
           method: 'DELETE',
           headers: {
@@ -71,7 +74,7 @@ export const fetchAllReports = createAsyncThunk(
   async (_: void, { rejectWithValue }) => {
     try {
       // TODO: Create reusable api utility function / move ro redux
-      const response = await fetch('http://localhost:3090/api/reports/all', {
+      const response = await fetch('http://51.38.65.161:3090/api/reports/all', {
         method: 'GET',
         headers: {
           Accept: 'application/json',
