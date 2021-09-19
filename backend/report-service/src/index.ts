@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 
 import { newReportRouter } from "./routes/newReport";
+import { getAllReportsRouter } from "./routes/getReports";
 
 import { errorHandler } from "./middlewares/error-handler";
 import { NotFoundError } from "./errors/not-found-error";
@@ -19,6 +20,7 @@ app.use(
 app.use(json());
 
 app.use(newReportRouter);
+app.use(getAllReportsRouter);
 
 app.all("*", async () => {
   throw new NotFoundError();

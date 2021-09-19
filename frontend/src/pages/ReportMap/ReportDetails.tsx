@@ -4,28 +4,21 @@ import { RootState } from '../../redux/store';
 import { Image, List, ListElement } from './styled';
 
 export const ReportDetails = (): JSX.Element => {
-  const {
-    author,
-    createdAt,
-    description,
-    image,
-    title,
-    type
-  } = useSelector((state: RootState) => state.map.active);
+  const { user, size, details, image, type, id } = useSelector(
+    (state: RootState) => state.map.active,
+  );
 
   return (
     <div>
       <List>
-        <ListElement>{author}</ListElement>
-        <ListElement>{title}</ListElement>
-        <ListElement>{createdAt}</ListElement>
-        <ListElement>{description}</ListElement>
-        <ListElement>{type}</ListElement>
+        <ListElement>User: {user}</ListElement>
+
+        <ListElement>Size: {size}</ListElement>
+        <ListElement>Type: {type}</ListElement>
+        <ListElement>Details: {details}</ListElement>
       </List>
 
-      <Image src={image} alt={title} />
+      <Image src={image} alt={id} />
     </div>
-  )
-
-
-}
+  );
+};

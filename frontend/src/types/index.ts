@@ -36,6 +36,8 @@ export type NotificatorInfo = {
  * a reported dump
  */
 export type Report = {
+  id?: string;
+  user?: string;
   location: string;
   image: string;
   size: string;

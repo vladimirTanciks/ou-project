@@ -2,11 +2,21 @@ import { createAsyncThunk, isAnyOf, createSlice } from '@reduxjs/toolkit';
 
 import { UserAuth, RequestStatus, UserCredentials } from '../../types';
 
+import { routes } from '../../router/routes';
+
+import history from '../../router/history';
+
 const LOGOUT = 'auth/logout';
 
-export const logout = () => ({
-  type: LOGOUT,
-});
+export const logout = () => {
+  localStorage.clear();
+
+  history.push(routes.HOME);
+
+  return {
+    type: LOGOUT,
+  };
+};
 
 export const registerUser = createAsyncThunk(
   'auth/registerUser',
@@ -30,7 +40,6 @@ export const registerUser = createAsyncThunk(
       const respData = await response.json();
 
       if (Array.isArray(respData?.errors) && respData.errors.length > 0) {
-        console.log(respData.errors[0].message);
         throw respData.errors[0].message;
       }
 
@@ -63,7 +72,6 @@ export const loginUser = createAsyncThunk(
       const accountData = await response.json();
 
       if (Array.isArray(accountData?.errors) && accountData.errors.length > 0) {
-        console.log(accountData.errors[0].message);
         throw accountData.errors[0].message;
       }
 
@@ -88,7 +96,10 @@ export const authSlice = createSlice({
     isAuthenticated: false,
     isLoading: false,
     status: 'idle',
-    accountData: null,
+    accountData: {
+      user: localStorage.getItem('user'),
+      token: localStorage.getItem('token'),
+    },
     error: null,
   } as AuthState,
   reducers: {},
@@ -96,6 +107,7 @@ export const authSlice = createSlice({
     builder
       .addCase(LOGOUT, (state) => {
         state.isAuthenticated = false;
+        state.accountData = null;
       })
       .addMatcher(isAnyOf(loginUser.pending, registerUser.pending), (state) => {
         state.status = 'loading';

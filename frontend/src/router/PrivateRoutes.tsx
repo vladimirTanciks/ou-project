@@ -10,7 +10,9 @@ export const PrivateRoute = ({ component: Component, ...rest }: any) => {
   );
 
   const renderComponent = (children?: JSX.Element) => {
-    if (isAuthenticated) {
+    const token = localStorage.getItem('token');
+
+    if (isAuthenticated || token) {
       return children || <Component />;
     }
 

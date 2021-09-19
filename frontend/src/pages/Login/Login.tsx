@@ -33,6 +33,9 @@ const Login: FC = (): JSX.Element => {
     const { payload } = await dispatch(loginUser(credentials));
 
     if (payload?.token) {
+      localStorage.setItem('token', payload?.token);
+      localStorage.setItem('user', payload?.user);
+
       history.push(routes.MAP);
     }
   };

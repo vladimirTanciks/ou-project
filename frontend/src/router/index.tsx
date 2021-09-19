@@ -22,7 +22,9 @@ const AppRouter = (): JSX.Element => (
       <Layout layoutChildren={<Map />} sidebarChildren={<ReportDetails />} />
     </PrivateRoute>
 
-    <Route exact path={routes.ADMIN} component={Admin} />
+    <PrivateRoute path={routes.ADMIN}>
+      <Layout layoutChildren={<Admin />} />
+    </PrivateRoute>
 
     <Route exact path={routes.REGISTER} component={Register} />
 

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Form, Input, Radio, Space, Button, message, Upload } from 'antd';
 import { useHistory } from 'react-router';
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { AppDispatch } from '../../redux/store';
@@ -40,11 +40,12 @@ export const ReportForm = () => {
 
     const imageRef = ref(storage, 'images/' + uploadedFile?.name);
 
-    return uploadBytesResumable(imageRef, uploadedFile)
+    return uploadBytes(imageRef, uploadedFile)
       .then((snapshot) => {
         // Get a download URL for the file.
         getDownloadURL(snapshot.ref).then((url) => {
           setIsLoading(false);
+
           const formData: Report = {
             location: selectedCoords,
             image: url,
@@ -108,12 +109,12 @@ export const ReportForm = () => {
     },
 
     onChange: (info: any) => {
-      setUploadedFile(info.fileList[0]);
+      console.log(info);
+      setUploadedFile(info.fileList[0].originFileObj);
     },
   };
 
   const handleRadioChange = (e: any) => {
-    console.log(e.target);
     setRadioState((state) => ({ ...state, [e.target.name]: e.target.value }));
   };
 
@@ -168,7 +169,7 @@ export const ReportForm = () => {
       </StyleRadioWrapper>
 
       <div style={{ marginBottom: 10, marginTop: 30, fontSize: 20 }}>
-        Location (Select using the map or device)
+        Location (Select using map or device)
       </div>
 
       <Form.Item style={{ marginBottom: 0 }}>

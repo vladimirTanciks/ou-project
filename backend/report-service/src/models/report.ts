@@ -28,32 +28,43 @@ interface ReportModel extends mongoose.Model<ReportDoc> {
   build(attrs: ReportAttrs): ReportDoc;
 }
 
-const reportSchema = new mongoose.Schema({
-  location: {
-    type: String,
-    required: true,
+const reportSchema = new mongoose.Schema(
+  {
+    location: {
+      type: String,
+      required: true,
+    },
+    image: {
+      type: String,
+      required: true,
+    },
+    size: {
+      type: String,
+      required: true,
+    },
+    type: {
+      type: String,
+      required: true,
+    },
+    details: {
+      type: String,
+      required: false,
+    },
+    user: {
+      type: String,
+      required: true,
+    },
   },
-  image: {
-    type: String,
-    required: true,
-  },
-  size: {
-    type: String,
-    required: true,
-  },
-  type: {
-    type: String,
-    required: true,
-  },
-  details: {
-    type: String,
-    required: false,
-  },
-  user: {
-    type: String,
-    required: true,
-  },
-});
+  {
+    toJSON: {
+      transform(doc, ret) {
+        ret.id = ret._id;
+        delete ret._id;
+        delete ret.__v;
+      },
+    },
+  }
+);
 
 reportSchema.statics.build = (attrs: ReportAttrs) => new Report(attrs);
 

@@ -31,7 +31,10 @@ const Register: FC = (): JSX.Element => {
   const handleSubmit = async (credentials: UserCredentials): Promise<void> => {
     const { payload } = await dispatch(registerUser(credentials));
 
-    if (payload?.email) {
+    if (payload?.user) {
+      localStorage.setItem('token', payload?.token);
+      localStorage.setItem('user', payload?.user);
+
       history.push(routes.MAP);
     }
   };

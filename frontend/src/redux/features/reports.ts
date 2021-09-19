@@ -3,12 +3,6 @@ import { createAsyncThunk, isAnyOf, createSlice } from '@reduxjs/toolkit';
 import { Report, RequestStatus } from '../../types';
 import { RootState } from '../store';
 
-const LOGOUT = 'auth/logout';
-
-export const logout = () => ({
-  type: LOGOUT,
-});
-
 export const createReport = createAsyncThunk(
   'reports/new',
   async (
@@ -33,7 +27,32 @@ export const createReport = createAsyncThunk(
       const respData = await response.json();
 
       if (Array.isArray(respData?.errors) && respData.errors.length > 0) {
-        console.log(respData.errors[0].message);
+        throw respData.errors[0].message;
+      }
+
+      return respData;
+    } catch (err) {
+      return rejectWithValue(err);
+    }
+  },
+);
+
+export const fetchAllReports = createAsyncThunk(
+  'reports/fetchAllReports',
+  async (_: void, { rejectWithValue }) => {
+    try {
+      // TODO: Create reusable api utility function / move ro redux
+      const response = await fetch('http://localhost:3090/api/reports/all', {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const respData = await response.json();
+
+      if (Array.isArray(respData?.errors) && respData.errors.length > 0) {
         throw respData.errors[0].message;
       }
 
@@ -45,16 +64,16 @@ export const createReport = createAsyncThunk(
 );
 
 export interface ReportsState {
-  reports: Report[] | null;
+  data: Report[] | null;
   status: RequestStatus;
   error: any; // TODO: Create type
   isLoading: boolean;
 }
 
-export const authSlice = createSlice({
+export const reportsSlice = createSlice({
   name: 'auth',
   initialState: {
-    reports: [],
+    data: [],
     isLoading: false,
     status: 'idle',
     error: null,
@@ -62,20 +81,26 @@ export const authSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addMatcher(isAnyOf(createReport.pending), (state) => {
-        state.status = 'loading';
-        state.error = null;
-        state.isLoading = true;
-      })
-      .addMatcher(isAnyOf(createReport.fulfilled), (state, action) => {
+      .addMatcher(
+        isAnyOf(createReport.pending, fetchAllReports.pending),
+        (state) => {
+          state.status = 'loading';
+          state.error = null;
+          state.isLoading = true;
+        },
+      )
+      .addMatcher(isAnyOf(fetchAllReports.fulfilled), (state, action) => {
         state.status = 'succeeded';
-        state.reports = action.payload;
+        state.data = action.payload.reports;
         state.isLoading = false;
       })
-      .addMatcher(isAnyOf(createReport.rejected), (state, action) => {
-        state.status = 'failed';
-        state.error = action.payload;
-        state.isLoading = false;
-      });
+      .addMatcher(
+        isAnyOf(createReport.rejected, fetchAllReports.rejected),
+        (state, action) => {
+          state.status = 'failed';
+          state.error = action.payload;
+          state.isLoading = false;
+        },
+      );
   },
 });

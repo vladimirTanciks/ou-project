@@ -34,8 +34,14 @@ export const Header = (): JSX.Element => {
     <StyledHeader>
       <Logo />
       <StyledNav>
-        <Link to={routes.NEW_REPORT}>
-          <Button type="primary" shape="circle" icon={<PlusOutlined />} />
+        <Link to={routes.NEW_REPORT} style={{ marginRight: 20 }}>
+          <Button
+            style={{ marginRight: 10 }}
+            type="primary"
+            shape="circle"
+            icon={<PlusOutlined />}
+          />
+          New report
         </Link>
 
         <StyledAccount>{accountName}</StyledAccount>

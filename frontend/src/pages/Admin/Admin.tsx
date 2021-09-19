@@ -1,8 +1,14 @@
-import { Table } from 'antd';
-import { Header } from '../../components/Header/Header';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { Table, Button } from 'antd';
+import { AppDispatch } from '../../redux/store';
+import { useSelector } from 'react-redux';
+
+import { fetchAllReports } from '../../redux/features/reports';
 
 import img1 from '../../images/d1.jpg';
 import img2 from '../../images/d2.jpg';
+import { RootState } from '../../redux/store';
 
 const columns = [
   {
@@ -14,17 +20,19 @@ const columns = [
     title: 'Image',
     dataIndex: 'image',
     key: 'image',
-    render: (imgSrc: string) => <img style={{ width: 60 }} src={imgSrc} />,
-  },
-  {
-    title: 'Status',
-    dataIndex: 'status',
-    key: 'status',
+    render: (imgSrc: string) => (
+      <img alt="reported dump" style={{ width: 60 }} src={imgSrc} />
+    ),
   },
   {
     title: 'Size',
     key: 'size',
     dataIndex: 'size',
+  },
+  {
+    title: 'Type',
+    key: 'type',
+    dataIndex: 'type',
   },
   {
     title: 'Location',
@@ -33,56 +41,32 @@ const columns = [
   },
   {
     title: 'Reported',
-    key: 'reported',
-    dataIndex: 'reported',
-  },
-  {
-    title: 'Show details',
-    key: 'showDetails',
-    dataIndex: 'showDetails',
-    render: (text: JSX.Element) => <a>{text}</a>,
+    key: 'user',
+    dataIndex: 'user',
   },
   {
     title: 'Action',
     key: 'action',
     dataIndex: 'action',
-    render: (text: JSX.Element) => <a>{text}</a>,
-  },
-];
-
-const data = [
-  {
-    id: 1,
-    image: img1,
-    status: 'still there',
-    size: 'car needed',
-    location: 'New Castle',
-    reported: '29 days ago',
-    showDetails: 'Details',
-    action: 'Delete',
-  },
-  {
-    id: 2,
-    image: img2,
-    status: 'still there',
-    size: 'car needed',
-    location: 'Lincoln',
-    reported: '15 days ago',
-    showDetails: 'Details',
-    action: 'Delete',
+    render: (text: JSX.Element) => <Button type="text">Delete</Button>,
   },
 ];
 
 const Admin = () => {
+  const dispatch: AppDispatch = useDispatch();
+  const reports = useSelector((state: RootState) => state.reports.data);
+
+  useEffect(() => {
+    dispatch(fetchAllReports());
+  }, [dispatch]);
+
   return (
     <div>
-      <Header />
-
       <div style={{ padding: 50 }}>
         <h1 style={{ marginBottom: '30px', fontWeight: 700, fontSize: 35 }}>
           Manage reports
         </h1>
-        <Table bordered={true} columns={columns} dataSource={data} />
+        <Table bordered={true} columns={columns} dataSource={reports || []} />
       </div>
     </div>
   );

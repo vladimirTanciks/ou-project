@@ -1,16 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Coords } from 'google-map-react';
 
-import { IReport } from '../../entities/report';
+import { Report } from '../../types';
 
 export const mapSlice = createSlice({
   name: 'map',
   initialState: {
-    active: {} as IReport,
+    active: {} as Report,
     coords: {} as Coords,
   },
   reducers: {
-    setActiveReport: (state, { payload }: PayloadAction<IReport>) => {
+    setActiveReport: (state, { payload }: PayloadAction<Report>) => {
       state.active = payload;
     },
     setMapCoords: (state, { payload }: PayloadAction<Coords>) => {
