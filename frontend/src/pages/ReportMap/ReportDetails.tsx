@@ -13,7 +13,7 @@ export const ReportDetails = (): JSX.Element => {
       <List>
         <ListElement>User: {user}</ListElement>
 
-        <ListElement>Size: {size}</ListElement>
+        <ListElement>Size: needs a {size}</ListElement>
         <ListElement>Type: {type}</ListElement>
         <ListElement>Details: {details}</ListElement>
       </List>

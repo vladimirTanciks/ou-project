@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Form, Input, Radio, Space, Button, message, Upload } from 'antd';
 import { useHistory } from 'react-router';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -12,7 +12,7 @@ import { storage } from '../../firebase';
 
 import { setMapCoords } from '../../redux/features/map';
 import { createReport } from '../../redux/features/reports';
-import { showNotification } from '../../redux/features/ui';
+import { clearNotification, showNotification } from '../../redux/features/ui';
 import { RootState } from '../../redux/store';
 import { NotificatorInfo, Report } from '../../types';
 
@@ -117,6 +117,12 @@ export const ReportForm = () => {
   const handleRadioChange = (e: any) => {
     setRadioState((state) => ({ ...state, [e.target.name]: e.target.value }));
   };
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearNotification());
+    };
+  }, [dispatch]);
 
   return (
     <Form

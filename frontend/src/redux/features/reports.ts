@@ -37,6 +37,35 @@ export const createReport = createAsyncThunk(
   },
 );
 
+export const deleteReport = createAsyncThunk(
+  'reports/deleteReport',
+  async (reportID: string, { rejectWithValue }) => {
+    try {
+      // TODO: Create reusable api utility function / move ro redux
+      const response = await fetch(
+        `http://localhost:3090/api/reports/delete/${reportID}`,
+        {
+          method: 'DELETE',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+
+      const respData = await response.json();
+
+      if (Array.isArray(respData?.errors) && respData.errors.length > 0) {
+        throw respData.errors[0].message;
+      }
+
+      return respData;
+    } catch (err) {
+      return rejectWithValue(err);
+    }
+  },
+);
+
 export const fetchAllReports = createAsyncThunk(
   'reports/fetchAllReports',
   async (_: void, { rejectWithValue }) => {
@@ -71,7 +100,7 @@ export interface ReportsState {
 }
 
 export const reportsSlice = createSlice({
-  name: 'auth',
+  name: 'reports',
   initialState: {
     data: [],
     isLoading: false,
@@ -82,7 +111,11 @@ export const reportsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addMatcher(
-        isAnyOf(createReport.pending, fetchAllReports.pending),
+        isAnyOf(
+          createReport.pending,
+          fetchAllReports.pending,
+          deleteReport.pending,
+        ),
         (state) => {
           state.status = 'loading';
           state.error = null;
@@ -95,7 +128,11 @@ export const reportsSlice = createSlice({
         state.isLoading = false;
       })
       .addMatcher(
-        isAnyOf(createReport.rejected, fetchAllReports.rejected),
+        isAnyOf(
+          createReport.rejected,
+          fetchAllReports.rejected,
+          deleteReport.rejected,
+        ),
         (state, action) => {
           state.status = 'failed';
           state.error = action.payload;

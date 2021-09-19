@@ -10,7 +10,6 @@ export const List = styled.ul`
 export const ListElement = styled.li`
   color: white;
   margin-bottom: 10px;
-  text-transform: capitalize;
 `;
 
 export const Image = styled.img`

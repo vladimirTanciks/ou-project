@@ -6,6 +6,7 @@ import cors from "cors";
 
 import { newReportRouter } from "./routes/newReport";
 import { getAllReportsRouter } from "./routes/getReports";
+import { deleteReportRouter } from "./routes/deleteReport";
 
 import { errorHandler } from "./middlewares/error-handler";
 import { NotFoundError } from "./errors/not-found-error";
@@ -21,6 +22,7 @@ app.use(json());
 
 app.use(newReportRouter);
 app.use(getAllReportsRouter);
+app.use(deleteReportRouter);
 
 app.all("*", async () => {
   throw new NotFoundError();

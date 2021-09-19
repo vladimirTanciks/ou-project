@@ -28,6 +28,7 @@ export const Map: FC<IProps> = ({ newReport }): JSX.Element => {
 
   const centerCoords = useSelector((state: RootState) => state.map.coords);
   const reports = useSelector((state: RootState) => state.reports.data);
+  const selectedReport = useSelector((state: RootState) => state.map.active);
 
   const createMapOptions = () => ({
     panControl: false,
@@ -56,7 +57,8 @@ export const Map: FC<IProps> = ({ newReport }): JSX.Element => {
         onChange={(val) => setSelectedCoords(val.center)}
         center={centerCoords.lng ? centerCoords : MAP_SETTINGS.center}
       >
-        {reportsAvailable &&
+        {!newReport &&
+          reportsAvailable &&
           reports.map((report: Report) => {
             const [lat, lng] = report.location.split(',');
 
@@ -66,7 +68,7 @@ export const Map: FC<IProps> = ({ newReport }): JSX.Element => {
                 lng={lng}
                 key={report.id}
                 image={report.image}
-                active={false}
+                active={selectedReport.id === report.id}
                 onClick={() => handleSetActiveDump(report)}
               />
             );

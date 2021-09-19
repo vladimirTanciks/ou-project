@@ -34,7 +34,7 @@ export const Header = (): JSX.Element => {
     <StyledHeader>
       <Logo />
       <StyledNav>
-        <Link to={routes.NEW_REPORT} style={{ marginRight: 20 }}>
+        <Link to={routes.NEW_REPORT} style={{ marginRight: 2 }}>
           <Button
             style={{ marginRight: 10 }}
             type="primary"
@@ -44,9 +44,22 @@ export const Header = (): JSX.Element => {
           New report
         </Link>
 
-        <StyledAccount>{accountName}</StyledAccount>
         <StyledSeparator>|</StyledSeparator>
-        <StyledLogout onClick={handleLogout}>logout</StyledLogout>
+
+        <Link to={routes.ADMIN} style={{ marginRight: 2 }}>
+          Manage reports
+        </Link>
+
+        <StyledSeparator>|</StyledSeparator>
+
+        <Link to={routes.MAP} style={{ marginRight: 20 }}>
+          Map
+        </Link>
+
+        <StyledAccount style={{ marginRight: 10 }}>{accountName}</StyledAccount>
+        <StyledLogout onClick={handleLogout} style={{ color: '#1890ff' }}>
+          Logout
+        </StyledLogout>
       </StyledNav>
     </StyledHeader>
   );

@@ -10,5 +10,10 @@ interface MarkerProps {
 }
 
 export const Marker: FC<MarkerProps> = ({ onClick, active, image }) => (
-  <DumpImage src={image} alt="marker" onClick={onClick} />
+  <DumpImage
+    src={image}
+    alt="marker"
+    onClick={onClick}
+    style={{ borderColor: active ? '#1890ff' : 'white' }}
+  />
 );
